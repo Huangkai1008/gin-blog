@@ -41,8 +41,12 @@ func init() {
 		host,
 		dbName))
 
+	fmt.Println(db.HasTable("blog_article"))
+
 	if err != nil {
 		log.Println(err)
+	} else {
+		fmt.Println("连接数据库成功")
 	}
 
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
@@ -52,8 +56,5 @@ func init() {
 	db.SingularTable(true)
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
-}
 
-func CloseDB() {
-	defer db.Close()
 }
