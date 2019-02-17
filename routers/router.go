@@ -2,6 +2,7 @@ package routers
 
 import (
 	"gin-blog/api/v1"
+	"gin-blog/middleware"
 	"gin-blog/pkg/setting"
 	"github.com/gin-gonic/gin"
 )
@@ -10,6 +11,7 @@ func InitRouter() *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
+	r.Use(middleware.Cors())
 	gin.SetMode(setting.RunMode)
 
 	apiv1 := r.Group("/api/v1")
