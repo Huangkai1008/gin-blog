@@ -12,7 +12,7 @@ type Article struct {
 	CreateTime string `json:"create_time"`
 	UpdateTime string `json:"update_time"`
 	Category   string `json:"category"`
-	Tag        string `json:"tag"`
+	Tags       string `json:"tags"`
 }
 
 func GetArticles(pageNum int, pageSize int, maps interface{}) (articles []Article) {
