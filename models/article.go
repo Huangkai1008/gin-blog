@@ -6,18 +6,19 @@ import (
 )
 
 type Article struct {
-	ID         int    `gorm:"primary_key" json:"id"`
-	Title      int    `json:"title"`
-	Content    string `json:"content"`
-	CreateTime string `json:"create_time"`
-	UpdateTime string `json:"update_time"`
-	Category   string `json:"category"`
-	Tags       string `json:"tags"`
+	ID         int       `gorm:"primary_key" json:"id"`
+	Title      string    `json:"title"`
+	Content    string    `json:"content"`
+	Category   string    `json:"category"`
+	Tags       string    `json:"tags"`
+	CreateTime time.Time `json:"create_time"`
+	UpdateTime time.Time `json:"update_time"`
 }
 
 func GetArticles(pageNum int, pageSize int, maps interface{}) (articles []Article) {
 	db.Where(maps).Offset(pageNum).Limit(pageSize).Find(&articles)
 	return
+
 }
 
 func (article *Article) BeforeCreate(scope *gorm.Scope) error {
