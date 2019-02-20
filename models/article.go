@@ -6,13 +6,11 @@ import (
 )
 
 type Article struct {
-	ID         int       `gorm:"primary_key" json:"id"`
-	Title      string    `json:"title"`
-	Content    string    `json:"content"`
-	Category   string    `json:"category"`
-	Tags       string    `json:"tags"`
-	CreateTime time.Time `json:"create_time"`
-	UpdateTime time.Time `json:"update_time"`
+	Model
+	Title    string `json:"title"`
+	Content  string `json:"content"`
+	Category string `json:"category"`
+	Tags     string `json:"tags"`
 }
 
 func GetArticles(pageNum int, pageSize int, maps interface{}) (articles []Article) {

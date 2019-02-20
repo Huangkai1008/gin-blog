@@ -11,9 +11,10 @@ import (
 var db *gorm.DB
 
 type Model struct {
+	// 默认model结构体
 	ID         int `gorm:"primary_key" json:"id"`
-	CreatedOn  int `json:"created_on"`
-	ModifiedOn int `json:"modified_on"`
+	CreateTime int `json:"create_time"`
+	UpdateTime int `json:"update_time"`
 }
 
 func init() {
