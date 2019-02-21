@@ -19,6 +19,11 @@ func GetArticles(pageNum int, pageSize int, maps interface{}) (articles []Articl
 
 }
 
+func GetArticle(maps interface{}) (article Article) {
+	db.Where(maps).First(&article)
+	return
+}
+
 func (article *Article) BeforeCreate(scope *gorm.Scope) error {
 	// 文章创建
 	_ = scope.SetColumn("CreateTime", time.Now().Unix())

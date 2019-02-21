@@ -6,15 +6,16 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"log"
+	"time"
 )
 
 var db *gorm.DB
 
 type Model struct {
 	// 默认model结构体
-	ID         int `gorm:"primary_key" json:"id"`
-	CreateTime int `json:"create_time"`
-	UpdateTime int `json:"update_time"`
+	ID         int       `gorm:"primary_key" json:"id"`
+	CreateTime time.Time `json:"create_time"`
+	UpdateTime time.Time `json:"update_time"`
 }
 
 func init() {

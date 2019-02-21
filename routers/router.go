@@ -14,16 +14,20 @@ func InitRouter() *gin.Engine {
 	r.Use(middleware.Cors())
 	gin.SetMode(setting.RunMode)
 
-	apiv1 := r.Group("/api/v1")
+	apiV1 := r.Group("/api/v1")
 	{
+		// 获取标签列表
+		apiV1.GET("/tags", v1.GetTags)
 		// 新建标签
-		apiv1.POST("/tags", v1.AddTag)
+		apiV1.POST("/tags", v1.AddTag)
 		//更新指定标签
-		apiv1.PUT("/tags/:id", v1.EditTag)
+		apiV1.PUT("/tags/:id", v1.EditTag)
 		//删除指定标签
-		apiv1.DELETE("/tags/:id", v1.DeleteTag)
+		apiV1.DELETE("/tags/:id", v1.DeleteTag)
 		// 获取文章列表
-		apiv1.GET("/articles", v1.GetArticles)
+		apiV1.GET("/articles", v1.GetArticles)
+		// 获取指定id文章
+		apiV1.GET("/articles/:id", v1.GetArticle)
 	}
 
 	return r
