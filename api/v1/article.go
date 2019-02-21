@@ -86,6 +86,11 @@ func GetArticle(c *gin.Context) {
 func AddArticle(c *gin.Context) {
 	var articleJson pickle.ArticleJson
 
+	err := c.Bind(&articleJson)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	valid := validation.Validation{}
 	valid.Required(articleJson.Title, "title").Message("文章标题不能为空")
 	valid.Required(articleJson.Content, "content").Message("文章内容不能为空")
@@ -99,9 +104,5 @@ func AddArticle(c *gin.Context) {
 			articleJson.Tags)
 	}
 
-	err := c.ShouldBindJSON(&articleJson)
-	if err != nil {
-		log.Fatal(err)
-	}
 	c.JSON(http.StatusOK, articleJson)
 }
