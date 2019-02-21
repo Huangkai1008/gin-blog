@@ -28,6 +28,8 @@ func InitRouter() *gin.Engine {
 		apiV1.GET("/articles", v1.GetArticles)
 		// 获取指定id文章
 		apiV1.GET("/articles/:id", v1.GetArticle)
+		// 新建文章
+		apiV1.POST("/articles", v1.AddArticle)
 	}
 
 	return r

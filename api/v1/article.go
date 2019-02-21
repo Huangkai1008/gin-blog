@@ -2,12 +2,12 @@ package v1
 
 import (
 	"encoding/json"
-	"fmt"
 	"gin-blog/models"
 	"gin-blog/pickle"
 	"gin-blog/pkg/setting"
 	"gin-blog/pkg/util"
 	"github.com/Unknwon/com"
+	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -52,10 +52,13 @@ func GetArticles(c *gin.Context) {
 // 获取文章
 func GetArticle(c *gin.Context) {
 	id := com.StrTo(c.Param("id")).MustInt()
+	if id == 0 {
+		id = 1
+	}
 
-	maps := make(map[string]interface{})
-
-	maps["id"] = id
+	maps := map[string]interface{}{
+		"id": id,
+	}
 
 	article := models.GetArticle(maps)
 
@@ -76,7 +79,29 @@ func GetArticle(c *gin.Context) {
 		UpdateTime: article.UpdateTime,
 		Tags:       tags}
 
-	fmt.Println(data)
-
 	c.JSON(http.StatusOK, data)
+}
+
+// 新增文章
+func AddArticle(c *gin.Context) {
+	var articleJson pickle.ArticleJson
+
+	valid := validation.Validation{}
+	valid.Required(articleJson.Title, "title").Message("文章标题不能为空")
+	valid.Required(articleJson.Content, "content").Message("文章内容不能为空")
+	valid.MaxSize(articleJson.Title, 100, "title").Message("文章标题不能超过100个字符")
+
+	if !valid.HasErrors() {
+		models.AddArticle(
+			articleJson.Title,
+			articleJson.Content,
+			articleJson.Category,
+			articleJson.Tags)
+	}
+
+	err := c.ShouldBindJSON(&articleJson)
+	if err != nil {
+		log.Fatal(err)
+	}
+	c.JSON(http.StatusOK, articleJson)
 }
