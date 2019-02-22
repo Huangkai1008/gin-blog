@@ -11,7 +11,7 @@ type Article struct {
 	Model
 	Title    string `json:"title"`
 	Content  string `json:"content"`
-	Category string `json:"category"`
+	Category int    `json:"category"`
 	Tags     string `json:"tags"`
 }
 
@@ -26,7 +26,7 @@ func GetArticle(maps interface{}) (article Article) {
 	return
 }
 
-func AddArticle(title string, content string, category string, tags []int) bool {
+func AddArticle(title string, content string, category int, tags []int) bool {
 
 	tagStr, err := json.Marshal(tags)
 	if err != nil {
@@ -45,14 +45,14 @@ func AddArticle(title string, content string, category string, tags []int) bool 
 
 func (article *Article) BeforeCreate(scope *gorm.Scope) error {
 	// 文章创建
-	_ = scope.SetColumn("CreateTime", time.Now().Unix())
+	_ = scope.SetColumn("CreateTime", time.Now())
 
 	return nil
 }
 
 func (article *Article) BeforeUpdate(scope *gorm.Scope) error {
 	// 文章更新
-	_ = scope.SetColumn("UpdateTime", time.Now().Unix())
+	_ = scope.SetColumn("UpdateTime", time.Now())
 
 	return nil
 }
