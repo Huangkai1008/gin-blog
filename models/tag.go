@@ -1,5 +1,10 @@
 package models
 
+import (
+	"github.com/jinzhu/gorm"
+	"time"
+)
+
 type Tag struct {
 	// 文章分类
 	Model
@@ -39,4 +44,18 @@ func AddTag(name string) bool {
 	})
 
 	return true
+}
+
+func (tag *Tag) BeforeCreate(scope *gorm.Scope) error {
+	// 文章创建
+	_ = scope.SetColumn("CreateTime", time.Now())
+
+	return nil
+}
+
+func (tag *Tag) BeforeUpdate(scope *gorm.Scope) error {
+	// 文章更新
+	_ = scope.SetColumn("UpdateTime", time.Now())
+
+	return nil
 }
