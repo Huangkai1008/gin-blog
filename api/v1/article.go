@@ -106,3 +106,7 @@ func AddArticle(c *gin.Context) {
 
 	c.JSON(http.StatusOK, articleJson)
 }
+
+func UpdateArticle(c *gin.Context) {
+
+}

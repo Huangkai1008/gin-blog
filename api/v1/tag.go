@@ -4,7 +4,9 @@ import (
 	"gin-blog/models"
 	"gin-blog/pkg/setting"
 	"gin-blog/pkg/util"
+	"github.com/astaxie/beego/validation"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 )
 
@@ -28,17 +30,23 @@ func GetTags(c *gin.Context) {
 
 }
 
-// 获得单个文章标签
-func GetTag(c *gin.Context) {
-	id := c.Query("id")
-	maps := make(map[string]interface{})
-
-	maps["id"] = id
-
-}
-
 //新增文章标签
 func AddTag(c *gin.Context) {
+	var tag models.Tag
+	err := c.Bind(&tag)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	valid := validation.Validation{}
+	valid.Required(tag.Name, "name").Message("标签名称不能为空")
+	valid.MaxSize(tag.Name, 100, "name").Message("标签长度不能超过100")
+
+	if !valid.HasErrors() {
+		models.AddTag(tag.Name)
+	}
+
+	c.JSON(http.StatusOK, tag)
 
 }
 
