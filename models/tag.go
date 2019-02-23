@@ -27,13 +27,24 @@ func ExistTag(params map[string]interface{}) bool {
 	// 是否存在Tag
 	var tag Tag
 	name, existName := params["name"]
+	id, existId := params["id"]
 
 	if existName {
 		db.Select("id").Where("name = ?", name).First(&tag)
 	}
+
 	if tag.ID > 0 {
 		return true
 	}
+
+	if existId {
+		db.Select("id").Where("id = ?", id).First(&tag)
+	}
+
+	if tag.ID > 0 {
+		return true
+	}
+
 	return false
 }
 
@@ -43,6 +54,19 @@ func AddTag(name string) bool {
 		Name: name,
 	})
 
+	return true
+}
+
+func UpdateTag(id int, data interface{}) bool {
+	// 修改标签
+	db.Model(&Tag{}).Where("id = ?", id).Updates(data)
+
+	return true
+}
+
+func DeleteTag(id int) bool {
+	// 删除标签
+	db.Where("id = ?", id).Delete(&Tag{})
 	return true
 }
 
