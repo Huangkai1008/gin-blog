@@ -30,6 +30,10 @@ func InitRouter() *gin.Engine {
 		apiV1.GET("/articles/:id", v1.GetArticle)
 		// 新建文章
 		apiV1.POST("/articles", v1.AddArticle)
+		// 修改文章
+		apiV1.PUT("/articles/:id", v1.UpdateArticle)
+		// 删除文章
+		apiV1.DELETE("/articles/:id", v1.DeleteArticle)
 	}
 
 	return r

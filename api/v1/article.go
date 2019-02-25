@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"gin-blog/models"
 	"gin-blog/pickle"
+	"gin-blog/pkg/e"
 	"gin-blog/pkg/setting"
 	"gin-blog/pkg/util"
 	"github.com/Unknwon/com"
@@ -107,6 +108,50 @@ func AddArticle(c *gin.Context) {
 	c.JSON(http.StatusOK, articleJson)
 }
 
+// 修改文章内容
 func UpdateArticle(c *gin.Context) {
+	id := com.StrTo(c.Param("id")).MustInt()
+	var article models.Article
 
+	err := c.BindJSON(&article)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	valid := validation.Validation{}
+
+	if !valid.HasErrors() {
+		params := map[string]interface{}{
+			"id": id,
+		}
+
+		if !models.ExistArticle(params) {
+			models.UpdateArticle(id, article)
+		} else {
+			c.JSON(e.ERROR_NOT_EXIST_ARTICLE, article)
+		}
+	}
+
+	c.JSON(http.StatusOK, article)
+}
+
+// 删除文章内容
+func DeleteArticle(c *gin.Context) {
+	id := com.StrTo(c.Param("id")).MustInt()
+
+	valid := validation.Validation{}
+	valid.Min(id, 1, "id").Message("id最小不能为0")
+
+	if !valid.HasErrors() {
+		params := map[string]interface{}{
+			"id": id,
+		}
+
+		if !models.ExistArticle(params) {
+			models.DeleteArticle(id)
+		} else {
+			c.JSON(e.ERROR_NOT_EXIST_ARTICLE, id)
+		}
+	}
+	c.JSON(http.StatusOK, id)
 }

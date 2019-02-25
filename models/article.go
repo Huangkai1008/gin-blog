@@ -26,6 +26,31 @@ func GetArticle(maps interface{}) (article Article) {
 	return
 }
 
+func ExistArticle(params map[string]interface{}) bool {
+	// 是否存在文章
+	var article Article
+	name, existName := params["name"]
+	if existName {
+		db.Select("name").Where("name = ?", name).First(&article)
+	}
+
+	if article.ID > 0 {
+		return true
+	}
+
+	id, existId := params["id"]
+	if existId {
+		db.Select("id").Where("id = ?", id).First(&article)
+	}
+
+	if article.ID > 0 {
+		return true
+	}
+
+	return false
+
+}
+
 func AddArticle(title string, content string, category int, tags []int) bool {
 
 	tagStr, err := json.Marshal(tags)
@@ -40,6 +65,18 @@ func AddArticle(title string, content string, category int, tags []int) bool {
 		Tags:     string(tagStr),
 	})
 
+	return true
+}
+
+func UpdateArticle(id int, data interface{}) bool {
+	// 修改文章
+	db.Model(&Tag{}).Where("id = ?", id).Update(data)
+	return true
+}
+
+func DeleteArticle(id int) bool {
+	// 删除文章
+	db.Where("id = ?", id).Delete(&Tag{})
 	return true
 }
 
